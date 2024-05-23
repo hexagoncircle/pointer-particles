@@ -24,7 +24,7 @@ class PointerParticle {
   }
 
   collapse() {
-    if (this.size > 0.1) this.size -= this.decay;
+    this.size -= this.decay;
   }
 
   trail() {
@@ -48,15 +48,9 @@ class PointerParticles extends HTMLElement {
 
   static css = `
     :host {
-      box-sizing: border-box;
-      position: relative;
-    }
-    
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
+      display: grid;
+      width: 100%;
+      height: 100%;
       user-select: none;
     }
   `;
@@ -81,7 +75,6 @@ class PointerParticles extends HTMLElement {
 
   connectedCallback() {
     const canvas = document.createElement("canvas");
-    const slot = document.createElement("slot");
     const sheet = new CSSStyleSheet();
 
     this.shadowroot = this.attachShadow({ mode: "open" });
@@ -90,7 +83,6 @@ class PointerParticles extends HTMLElement {
     this.shadowroot.adoptedStyleSheets = [sheet];
 
     this.shadowroot.append(canvas);
-    this.shadowroot.append(slot);
 
     this.canvas = this.shadowroot.querySelector("canvas");
     this.ctx = this.canvas.getContext("2d");
@@ -116,7 +108,9 @@ class PointerParticles extends HTMLElement {
   }
 
   setupEvents() {
-    this.addEventListener("click", (event) => {
+    const parent = this.parentNode;
+
+    parent.addEventListener("click", (event) => {
       this.createParticles(event, {
         count: 300,
         speed: Math.random() + 1,
@@ -124,7 +118,7 @@ class PointerParticles extends HTMLElement {
       });
     });
 
-    this.addEventListener("pointermove", (event) => {
+    parent.addEventListener("pointermove", (event) => {
       this.createParticles(event, {
         count: 20,
         speed: this.getSpeed(event),
@@ -167,8 +161,8 @@ class PointerParticles extends HTMLElement {
   animateParticles() {
     requestAnimationFrame(() => this.animateParticles());
 
-    let timeNow = performance.now();
-    let timePassed = timeNow - this.timePrevious;
+    const timeNow = performance.now();
+    const timePassed = timeNow - this.timePrevious;
 
     if (timePassed < this.msPerFrame) return;
 

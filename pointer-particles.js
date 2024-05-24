@@ -149,10 +149,7 @@ class PointerParticles extends HTMLElement {
   }
 
   setCanvasDimensions() {
-    this.canvas.width = 0;
-    this.canvas.height = 0;
-
-    const rect = this.getBoundingClientRect();
+    const rect = this.parentNode.getBoundingClientRect();
 
     this.canvas.width = rect.width;
     this.canvas.height = rect.height;

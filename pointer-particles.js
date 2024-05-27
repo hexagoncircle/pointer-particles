@@ -13,7 +13,7 @@ class PointerParticle {
     this.spread = spread * this.speed;
     this.spreadX = (Math.random() - 0.5) * this.spread - this.mx;
     this.spreadY = (Math.random() - 0.5) * this.spread - this.my;
-    this.color = `hsl(${hue}, 90%, 60%)`;
+    this.color = `hsl(${hue}deg 90% 60%)`;
   }
 
   draw() {
@@ -51,7 +51,7 @@ class PointerParticles extends HTMLElement {
       display: grid;
       width: 100%;
       height: 100%;
-      user-select: none;
+      pointer-events: none;
     }
   `;
 

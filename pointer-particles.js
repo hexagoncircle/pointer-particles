@@ -62,7 +62,7 @@ class PointerParticles extends HTMLElement {
     this.ctx;
     this.fps = 60;
     this.msPerFrame = 1000 / this.fps;
-    this.timePrevious;
+    this.timePrevious = performance.now();
     this.particles = [];
     this.pointer = {
       x: 0,
@@ -86,9 +86,9 @@ class PointerParticles extends HTMLElement {
 
     this.canvas = this.shadowroot.querySelector("canvas");
     this.ctx = this.canvas.getContext("2d");
+
     this.setCanvasDimensions();
     this.setupEvents();
-    this.timePrevious = performance.now();
     this.animateParticles();
   }
 
@@ -121,7 +121,7 @@ class PointerParticles extends HTMLElement {
     parent.addEventListener("pointermove", (event) => {
       this.createParticles(event, {
         count: 20,
-        speed: this.getSpeed(event),
+        speed: this.getPointerVelocity(event),
         spread: 1,
       });
     });
@@ -129,7 +129,7 @@ class PointerParticles extends HTMLElement {
     window.addEventListener("resize", () => this.setCanvasDimensions());
   }
 
-  getSpeed(event) {
+  getPointerVelocity(event) {
     const a = event.movementX;
     const b = event.movementY;
     const c = Math.floor(Math.sqrt(a * a + b * b));
